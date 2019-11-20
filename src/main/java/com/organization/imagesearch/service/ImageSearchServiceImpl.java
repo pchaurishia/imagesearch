@@ -4,7 +4,9 @@ package com.organization.imagesearch.service;
 import com.organization.imagesearch.exception.FileStorageException;
 import com.organization.imagesearch.exception.ImageNotFoundException;
 import com.organization.imagesearch.model.ImageSearchResponse;
+import com.organization.imagesearch.model.ImageTemplateMatcherDTO;
 import com.organization.imagesearch.properties.FileStorageProperties;
+import com.organization.imagesearch.util.ImageTemplateMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -13,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -24,6 +27,8 @@ import java.nio.file.StandardCopyOption;
 public class ImageSearchServiceImpl implements ImageSearchService {
 
     private final Path fileStorageLocation;
+    @Autowired
+    private ImageTemplateMatcher imageTemplateMatcher;
 
     @Autowired
     public ImageSearchServiceImpl(FileStorageProperties fileStorageProperties) throws FileStorageException {
@@ -38,7 +43,7 @@ public class ImageSearchServiceImpl implements ImageSearchService {
     }
 
     @Override
-    public ImageSearchResponse storeFile(MultipartFile file, Double threshold) throws FileStorageException {
+    public ImageSearchResponse storeAndCompareFile(MultipartFile file, Double threshold) throws FileStorageException {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -52,17 +57,17 @@ public class ImageSearchServiceImpl implements ImageSearchService {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-//            return fileName;
-//
-//            String fileName = imageSearchService.storeFile(file,threshold);
-
             String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path("/downloadFile/")
                     .path(fileName)
                     .toUriString();
 
+            File file1 = new File(this.fileStorageLocation.toString(), fileName);
+//            ImageTemplateMatcher imageTemplateMatcher = new ImageTemplateMatcher();
+            ImageTemplateMatcherDTO imageTemplateMatcherDTO= imageTemplateMatcher.compare(file1,threshold);
+
             return new ImageSearchResponse(fileName, fileDownloadUri,
-                    file.getContentType(), file.getSize());
+                    file.getContentType(), file.getSize(),imageTemplateMatcherDTO.getPosition(),imageTemplateMatcherDTO.getPercentageMatch());
 
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
