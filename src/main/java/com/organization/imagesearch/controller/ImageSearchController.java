@@ -15,13 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class ImageSearchController {
@@ -33,8 +29,7 @@ public class ImageSearchController {
 
     @PostMapping("/uploadFile")
     public ImageSearchResponse uploadFile(@RequestParam("file") MultipartFile file, @RequestParam(value = "threshold", required = false) Double threshold) throws FileStorageException {
-
-        return imageSearchService.storeFile(file,threshold);
+        return imageSearchService.storeAndCompareFile(file,threshold);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -42,15 +37,6 @@ public class ImageSearchController {
     ErrorMessage exceptionHandler(FileStorageException e){
         return new ErrorMessage(ImageSearchErrorCodes.FILE_STORAGE_ERROR.getErrorCode(),e.getLocalizedMessage());
     }
-
-//    @PostMapping("/uploadMultipleFiles")
-//    public List<ImageSearchResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,
-//                                                         @RequestParam(value = "threshold", required = false) Double threshold)  {
-//        return Arrays.asList(files)
-//                .stream()
-//                .map(file -> uploadFile(file, threshold))
-//                .collect(Collectors.toList());
-//    }
 
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {

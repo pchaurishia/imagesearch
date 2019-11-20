@@ -9,11 +9,13 @@ public class ImageSearchResponse {
     private long position;
     private double percentageMatch;
 
-    public ImageSearchResponse(String fileName, String fileDownloadUri, String fileType, long size) {
+    public ImageSearchResponse(String fileName, String fileDownloadUri, String fileType, long size, long position, double percentageMatch) {
         this.fileName = fileName;
         this.fileDownloadUri = fileDownloadUri;
         this.fileType = fileType;
         this.size = size;
+        this.position = position;
+        this.percentageMatch = percentageMatch;
     }
 
     public String getFileName() {
