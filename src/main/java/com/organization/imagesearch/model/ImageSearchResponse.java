@@ -1,11 +1,13 @@
 package com.organization.imagesearch.model;
 
+/**
+ * Response returned after image is matched in addition to position and percentage it also returns file name and few file metadata
+ */
 public class ImageSearchResponse {
     private String fileName;
     private String fileDownloadUri;
     private String fileType;
     private long size;
-
     private long position;
     private double percentageMatch;
 
