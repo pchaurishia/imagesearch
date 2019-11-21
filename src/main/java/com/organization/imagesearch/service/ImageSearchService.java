@@ -13,7 +13,7 @@ public interface ImageSearchService {
      * @return ImageSearchResponse
      * @throws FileStorageException
      */
-    ImageSearchResponse storeAndCompareFile(MultipartFile file, Double threshold) throws FileStorageException;
+    ImageSearchResponse storeAndCompareFile(MultipartFile file, Integer threshold) throws FileStorageException;
 
     /**
      * Loads the file

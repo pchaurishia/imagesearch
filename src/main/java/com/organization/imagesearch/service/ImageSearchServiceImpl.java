@@ -43,7 +43,7 @@ public class ImageSearchServiceImpl implements ImageSearchService {
     }
 
     @Override
-    public ImageSearchResponse storeAndCompareFile(MultipartFile file, Double threshold) throws FileStorageException {
+    public ImageSearchResponse storeAndCompareFile(MultipartFile file, Integer threshold) throws FileStorageException {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 

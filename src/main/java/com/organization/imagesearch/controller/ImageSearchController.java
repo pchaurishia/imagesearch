@@ -28,7 +28,7 @@ public class ImageSearchController {
     private ImageSearchService imageSearchService;
 
     @PostMapping("/uploadFile")
-    public ImageSearchResponse uploadFile(@RequestParam("file") MultipartFile file, @RequestParam(value = "threshold", required = false) Double threshold) throws FileStorageException {
+    public ImageSearchResponse uploadFile(@RequestParam("file") MultipartFile file, @RequestParam(value = "threshold", required = false) Integer threshold) throws FileStorageException {
         return imageSearchService.storeAndCompareFile(file,threshold);
     }
 
