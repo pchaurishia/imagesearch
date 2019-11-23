@@ -6,7 +6,7 @@ import com.organization.imagesearch.exception.ImageNotFoundException;
 import com.organization.imagesearch.model.ImageSearchResponse;
 import com.organization.imagesearch.model.ImageTemplateMatcherDTO;
 import com.organization.imagesearch.properties.FileStorageProperties;
-import com.organization.imagesearch.util.ImageTemplateMatcher;
+import com.organization.imagesearch.util.FuzzyTextImageMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -28,7 +28,7 @@ public class ImageSearchServiceImpl implements ImageSearchService {
 
     private final Path fileStorageLocation;
     @Autowired
-    private ImageTemplateMatcher imageTemplateMatcher;
+    private FuzzyTextImageMatcher imageMatcher;
 
     @Autowired
     public ImageSearchServiceImpl(FileStorageProperties fileStorageProperties) throws FileStorageException {
@@ -63,8 +63,8 @@ public class ImageSearchServiceImpl implements ImageSearchService {
                     .toUriString();
 
             File file1 = new File(this.fileStorageLocation.toString(), fileName);
-//            ImageTemplateMatcher imageTemplateMatcher = new ImageTemplateMatcher();
-            ImageTemplateMatcherDTO imageTemplateMatcherDTO= imageTemplateMatcher.compare(file1,threshold);
+
+            ImageTemplateMatcherDTO imageTemplateMatcherDTO= imageMatcher.compare(file1,threshold);
 
             return new ImageSearchResponse(fileName, fileDownloadUri,
                     file.getContentType(), file.getSize(),imageTemplateMatcherDTO.getPosition(),imageTemplateMatcherDTO.getPercentageMatch());

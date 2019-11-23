@@ -32,12 +32,12 @@ public class ImageSearchController {
         return imageSearchService.storeAndCompareFile(file,threshold);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler
-    ErrorMessage exceptionHandler(FileStorageException e){
-        return new ErrorMessage(ImageSearchErrorCodes.FILE_STORAGE_ERROR.getErrorCode(),e.getLocalizedMessage());
-    }
-
+    /**
+     * download file given the file name
+     * @param fileName
+     * @param request
+     * @return
+     */
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
@@ -48,6 +48,7 @@ public class ImageSearchController {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
+            //throw error if file not found
             logger.info("Could not determine file type.");
         }
 
@@ -60,5 +61,16 @@ public class ImageSearchController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+    }
+
+    /**
+     * Process errors
+     * @param e
+     * @return
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    ErrorMessage exceptionHandler(FileStorageException e){
+        return new ErrorMessage(ImageSearchErrorCodes.FILE_STORAGE_ERROR.getErrorCode(),e.getLocalizedMessage());
     }
 }

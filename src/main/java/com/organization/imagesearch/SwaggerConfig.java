@@ -13,11 +13,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static springfox.documentation.service.ApiInfo.DEFAULT_CONTACT;
-
-//Configuration
 @Configuration
-//Enable Swagger
 @EnableSwagger2
 public class SwaggerConfig {
     public static final Contact DEFAULT_CONTACT = new Contact("Priyanka", "organization.com", "pchaurishia@organization.com");
