@@ -73,4 +73,9 @@ public class ImageSearchController {
     ErrorMessage exceptionHandler(FileStorageException e){
         return new ErrorMessage(ImageSearchErrorCodes.FILE_STORAGE_ERROR.getErrorCode(),e.getLocalizedMessage());
     }
+
+    @GetMapping("/ping")
+    public String ping() {
+        return "hello";
+    }
 }
