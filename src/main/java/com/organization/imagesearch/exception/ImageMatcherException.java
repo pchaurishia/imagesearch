@@ -7,14 +7,14 @@ package com.organization.imagesearch.exception;
  */
 
 public
-class MethodNotSupportedException extends RuntimeException {
+class ImageMatcherException extends Exception {
     private static final long serialVersionUID = 5195511250079656443L;
 
     /**
      * Constructs a <code>MethodNotSupportedException</code> with no
      * detail message.
      */
-    public MethodNotSupportedException() {
+    public ImageMatcherException() {
         super();
     }
 
@@ -24,7 +24,7 @@ class MethodNotSupportedException extends RuntimeException {
      *
      * @param   s   the detail message.
      */
-    public MethodNotSupportedException(String s) {
+    public ImageMatcherException(String s) {
         super(s);
     }
 }
