@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -26,6 +25,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * This class is main class where file is stored in a persistant location and compared against the template file
+ */
 @Service
 public class ImageSearchServiceImpl implements ImageSearchService {
     public static final String TXT = "txt";
@@ -60,14 +62,14 @@ public class ImageSearchServiceImpl implements ImageSearchService {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
+            File file1 = new File(this.fileStorageLocation.toString(), fileName);
+
+            ImageTemplateMatcherDTO imageTemplateMatcherDTO= imageMatcher.compare(file1,threshold);
+
             String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path("/downloadFile/")
                     .path(fileName)
                     .toUriString();
-
-            File file1 = new File(this.fileStorageLocation.toString(), fileName);
-
-            ImageTemplateMatcherDTO imageTemplateMatcherDTO= imageMatcher.compare(file1,threshold);
 
             return new ImageSearchResponse(fileName, fileDownloadUri,
                     file.getContentType(), file.getSize(),imageTemplateMatcherDTO.getPosition(),imageTemplateMatcherDTO.getPercentageMatch());
@@ -79,7 +81,7 @@ public class ImageSearchServiceImpl implements ImageSearchService {
 
     protected void validateFileExtension(String fileName) throws FileStorageException {
         String ext1 = FilenameUtils.getExtension(fileName);
-        //If file extension is anything elase apart from text throw error
+        //If file extension is anything else apart from text throw error
         if(!org.apache.commons.lang3.StringUtils.equalsIgnoreCase(ext1, TXT)){
             throw new FileStorageException("Sorry! Only text files supported at this time " + fileName);
         }
