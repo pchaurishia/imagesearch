@@ -75,7 +75,6 @@ public class ImageSearchServiceImpl implements ImageSearchService {
                     file.getContentType(), file.getSize(),imageTemplateMatcherDTO.getPosition(),imageTemplateMatcherDTO.getPercentageMatch());
 
         } catch (IOException | ImageMatcherException ex) {
-            ex.printStackTrace();
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
