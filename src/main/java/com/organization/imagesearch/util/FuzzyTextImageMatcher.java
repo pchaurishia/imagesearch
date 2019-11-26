@@ -15,6 +15,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+/**
+ * Fuzzy search the text image
+ * @author Priyanka
+ */
 @Service
 public class FuzzyTextImageMatcher implements  ImageMatchingStrategy{
 
@@ -24,6 +28,7 @@ public class FuzzyTextImageMatcher implements  ImageMatchingStrategy{
 
     public ImageTemplateMatcherDTO compare(File file1, Integer threshold) throws ImageMatcherException {
 
+        //validations
         if(file1==null){
             throw new ImageMatcherException("Input file provided is null");
         }

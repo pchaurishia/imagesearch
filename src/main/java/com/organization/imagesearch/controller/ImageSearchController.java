@@ -19,6 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * ImageSearchController searches given file with template stored in server.
+ *
+ * @author Priyanka
+ */
 @RestController
 public class ImageSearchController {
 

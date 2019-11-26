@@ -32,6 +32,7 @@ import java.nio.file.StandardCopyOption;
 public class ImageSearchServiceImpl implements ImageSearchService {
     public static final String TXT = "txt";
     private final Path fileStorageLocation;
+
     @Autowired
     private FuzzyTextImageMatcher imageMatcher;
 
